@@ -1,21 +1,17 @@
-# Dockerfile for book_catalog microservice
-# Use official Python image as a base
-FROM python:3.9-slim
+# Use the official Python image from the Docker Hub
+FROM python:3.11-alpine
 
 # Set the working directory inside the container
-WORKDIR /app
+WORKDIR /app/
 
-# Copy the requirements.txt file to the working directory in the container
-COPY requirements.txt /app/
+# Copy the requirements file to the working directory
+COPY book_catalog/requirements.txt /app/
 
-# Install dependencies from requirements.txt
+# Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code to the working directory in the container
-COPY . /app
+# Copy the rest of the application code to the working directory
+COPY book_catalog/ /app/
 
-# Expose the port that the app will run on
-EXPOSE 8000
-
-# Command to run the application using Uvicorn server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Specify the command to run the application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port","8000"]

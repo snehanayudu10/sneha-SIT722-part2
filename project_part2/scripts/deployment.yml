@@ -1,10 +1,9 @@
-# Write Kubernetes Deployment Script
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: book-catalog
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: book-catalog
@@ -13,24 +12,26 @@ spec:
       labels:
         app: book-catalog
     spec:
-      containers:
-      - name: book-catalog
-        image: <your-dockerhub-username>/book-catalog:latest
-        ports:
-        - containerPort: 8000
-        env:
-        - name: DATABASE_URL
-          value: "postgresql://user:password@postgres-service:5432/bookdb"
+      containers: 
+        - name: book-catalog
+          image: s224403789/week08:1
+          ports:
+            - containerPort: 8000
+          imagePullPolicy: Always
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://week08_949u_user:iVDPbpkJ1wZqVSu5jLcpWmefncHrU3Hc@dpg-crlqt0jv2p9s73e2vl1g-a.oregon-postgres.render.com/week08_949u"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: book-catalog-service
+  name: book-catalog
 spec:
-  type: NodePort
-  ports:
-    - port: 8000
-      targetPort: 8000
-      nodePort: 30001
   selector:
     app: book-catalog
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30000
